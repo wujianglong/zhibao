@@ -2,7 +2,7 @@
   <div class="home">
     <div class="homeNav layoutFlex">
       <div class="nav-provice ml3">
-        <span> 江西省 </span> <span class="nav-arrow ml1"> </span>
+        <span> 江西省</span> <span class="nav-arrow ml1"> </span>
       </div>
       <div class="nav-input" @click="toSearch">
         <input type="text" placeholder="搜索" />
@@ -10,10 +10,12 @@
     </div>
     <div class="top-content">
       <div class="carousel">
-        <img
-          src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-          alt=""
-        />
+        <swiper :options="swiperOption">
+          <swiper-slide v-for="(item, index) in banner_info" :key="index">
+            <img :src="item.img_url" alt="" />
+          </swiper-slide>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
       </div>
       <!-- 地区工作 婚恋交友 新手引导 邀请有礼 -->
       <div class="list mt3">
@@ -68,207 +70,87 @@
       </div>
       <div class="work">
         <ul>
-          <router-link tag="li" to="/detail">
+          <router-link
+            tag="li"
+            to="/detail"
+            v-for="(item, index) in recruitments"
+            :key="index"
+          >
             <div class="work-content layoutFlex">
               <div class="work-img mt3 mb3">
-                <img
-                  src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-                  alt=""
-                />
+                <img :src="item.enterprise.img_urls" alt="" />
               </div>
               <div class="work-txt mt3 mb3 ml3 tal">
-                <p class="factory">南昌环宇兴鑫招聘电焊工</p>
+                <p class="factory">{{ item.enterprise.name }}</p>
                 <p class="age">
-                  年龄：<span>18-40</span> 性别：<span>男女不限</span>
+                  年龄：<span>{{ item.age }}</span> 性别：<span>男女不限</span>
                 </p>
                 <p class="salary">
-                  薪资：<span class="color1">4500-6000</span>
+                  薪资：<span class="color1">{{ item.salary }}</span>
                 </p>
                 <div class="signUp layoutFlex">
-                  <span> 报名<label class="color1">132</label>人 </span>
+                  <span> 报名<label class="color1">22</label>人 </span>
                   <button>招工中</button>
                 </div>
               </div>
             </div>
           </router-link>
-          <router-link tag="li" to="/detail">
-            <div class="work-content layoutFlex">
-              <div class="work-img mt3 mb3">
-                <img
-                  src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-                  alt=""
-                />
-              </div>
-              <div class="work-txt mt3 mb3 ml3 tal">
-                <p class="factory">南昌环宇兴鑫招聘电焊工</p>
-                <p class="age">
-                  年龄：<span>18-40</span> 性别：<span>男女不限</span>
-                </p>
-                <p class="salary">
-                  薪资：<span class="color1">4500-6000</span>
-                </p>
-                <div class="signUp layoutFlex">
-                  <span> 报名<label class="color1">132</label>人 </span>
-                  <button>招工中</button>
-                </div>
-              </div>
-            </div>
-          </router-link>
-          <router-link tag="li" to="/detail">
-            <div class="work-content layoutFlex">
-              <div class="work-img mt3 mb3">
-                <img
-                  src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-                  alt=""
-                />
-              </div>
-              <div class="work-txt mt3 mb3 ml3 tal">
-                <p class="factory">南昌环宇兴鑫招聘电焊工</p>
-                <p class="age">
-                  年龄：<span>18-40</span> 性别：<span>男女不限</span>
-                </p>
-                <p class="salary">
-                  薪资：<span class="color1">4500-6000</span>
-                </p>
-                <div class="signUp layoutFlex">
-                  <span> 报名<label class="color1">132</label>人 </span>
-                  <button>招工中</button>
-                </div>
-              </div>
-            </div>
-          </router-link>
-          <router-link tag="li" to="/detail">
-            <div class="work-content layoutFlex">
-              <div class="work-img mt3 mb3">
-                <img
-                  src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-                  alt=""
-                />
-              </div>
-              <div class="work-txt mt3 mb3 ml3 tal">
-                <p class="factory">南昌环宇兴鑫招聘电焊工</p>
-                <p class="age">
-                  年龄：<span>18-40</span> 性别：<span>男女不限</span>
-                </p>
-                <p class="salary">
-                  薪资：<span class="color1">4500-6000</span>
-                </p>
-                <div class="signUp layoutFlex">
-                  <span> 报名<label class="color1">132</label>人 </span>
-                  <button>招工中</button>
-                </div>
-              </div>
-            </div>
-          </router-link>
-          <!--
-            <li>
-              <div class="work-content layoutFlex">
-                <div class="work-img mt3 mb3">
-                  <img
-                    src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div class="work-txt mt3 mb3 ml3 tal">
-                  <p class="factory">南昌环宇兴鑫招聘电焊工</p>
-                  <p class="age">
-                    年龄：<span>18-40</span> 性别：<span>男女不限</span>
-                  </p>
-                  <p class="salary">
-                    薪资：<span class="color1">4500-6000</span>
-                  </p>
-                  <div class="signUp layoutFlex">
-                    <span> 报名<label class="color1">132</label>人 </span>
-                    <button>招工中</button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          -->
-          <!--
-            <li>
-              <div class="work-content layoutFlex">
-                <div class="work-img mt3 mb3">
-                  <img
-                    src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div class="work-txt mt3 mb3 ml3 tal">
-                  <p class="factory">南昌环宇兴鑫招聘电焊工</p>
-                  <p class="age">
-                    年龄：<span>18-40</span> 性别：<span>男女不限</span>
-                  </p>
-                  <p class="salary">
-                    薪资：<span class="color1">4500-6000</span>
-                  </p>
-                  <div class="signUp layoutFlex">
-                    <span> 报名<label class="color1">132</label>人 </span>
-                    <button>招工中</button>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="work-content layoutFlex">
-                <div class="work-img mt3 mb3">
-                  <img
-                    src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div class="work-txt mt3 mb3 ml3 tal">
-                  <p class="factory">南昌环宇兴鑫招聘电焊工</p>
-                  <p class="age">
-                    年龄：<span>18-40</span> 性别：<span>男女不限</span>
-                  </p>
-                  <p class="salary">
-                    薪资：<span class="color1">4500-6000</span>
-                  </p>
-                  <div class="signUp layoutFlex">
-                    <span> 报名<label class="color1">132</label>人 </span>
-                    <button>招工中</button>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div class="work-content layoutFlex">
-                <div class="work-img mt3 mb3">
-                  <img
-                    src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div class="work-txt mt3 mb3 ml3 tal">
-                  <p class="factory">南昌环宇兴鑫招聘电焊工</p>
-                  <p class="age">
-                    年龄：<span>18-40</span> 性别：<span>男女不限</span>
-                  </p>
-                  <p class="salary">
-                    薪资：<span class="color1">4500-6000</span>
-                  </p>
-                  <div class="signUp layoutFlex">
-                    <span> 报名<label class="color1">132</label>人 </span>
-                    <button>招工中</button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          -->
         </ul>
       </div>
     </div>
     <footerCom></footerCom>
   </div>
 </template>
-
 <script>
+import { mapState } from "vuex";
+import { swiper, swiperSlide } from "vue-awesome-swiper";
 import footerCom from "@/components/footer/footer.vue";
 export default {
   name: "home",
+  data() {
+    return {
+      swiperOption: {
+        autoplay: {
+          delay: 4000,
+          stopOnLastSlide: false,
+          disableOnInteraction: false
+        },
+        loop: true,
+        observer: true,
+        observeParents: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true
+        },
+        recruitments: []
+      }
+    };
+  },
   components: {
-    footerCom
+    footerCom,
+    swiper,
+    swiperSlide
+  },
+  computed: {
+    ...mapState({
+      banner_info: res => res.banner_info,
+      // recruitments: res => res.recruitments,
+      userInfo: res => res.userInfo
+    })
+  },
+  created() {
+    // 获取banner
+    this.$store.dispatch("getBanner");
+
+    // 获取列表厂商信息
+    // console.log(this.$api);
+    this.$api
+      .recruitments()
+      .then(res => {
+        // this.$set(this.recruitments, res.results);
+        this.recruitments = res.results;
+      })
+      .catch(() => {});
   },
   methods: {
     toSearch() {

@@ -3,25 +3,25 @@
     <comNav msg="招聘信息"></comNav>
     <div class="detail-content">
       <div class="detail-img">
-        <img
-          src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-          alt=""
-        />
+        <img :src="recruitmentsId.enterprise.img_urls[0]" alt="" />
       </div>
       <div class="detail-location tal mt3 mb3">
         <div class="factory-name">
-          <p class="name">南昌环宇兴鑫招聘电焊工</p>
-          <p class="mt1">电焊工 | 18-40 | 男女不限</p>
-          <p class="color1 mt1">4500-6000/月</p>
+          <p class="name">{{ recruitmentsId.enterprise.name }}</p>
+          <p class="mt1">
+            {{ recruitmentsId.station }} | {{ recruitmentsId.age }} | 男女不限
+          </p>
+          <p class="color1 mt1">{{ recruitmentsId.salary }}/月</p>
         </div>
         <div class="factory-location mt3">
           <div>
-            <p><img src="" alt="" />南昌环宇兴鑫建材有限公司</p>
-            <p class="mt1">江西省南昌县小蓝经济开发区小蓝二路281号</p>
+            <p><img src="" alt="" />{{ recruitmentsId.enterprise.name }}</p>
+            <p class="mt1">{{ recruitmentsId.enterprise.address }}</p>
           </div>
           <div class="right-arrow"></div>
         </div>
       </div>
+      <div>dwq</div>
       <!-- 岗位描述 -->
       <div class="desc tal mt5">
         <div class="header layoutFlex mb3">
@@ -66,8 +66,14 @@
 </template>
 <script>
 import comNav from "@/components/nav/comNav";
+import { mapState } from "vuex";
 export default {
   name: "detail",
+  computed: {
+    ...mapState({
+      recruitmentsId: res => res.recruitmentsId
+    })
+  },
   components: {
     comNav
   }

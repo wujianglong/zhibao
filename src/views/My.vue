@@ -10,68 +10,111 @@
           />
         </div>
         <div class="user-info tal ml5">
-          <p class="user-info-name">工地上的手艺人</p>
-          <p>初级工友情 ID：152854625</p>
+          <p class="user-info-name">工地上的手艺人(暂无此数据)</p>
+          <p>初级工友情 ID：{{ userInfo.id }}</p>
         </div>
         <div class="user-set"></div>
       </div>
       <div class="profit layoutFlex">
-        <span class="ml5"> 总收益 </span> <span class="fw">0.00元</span>
+        <span class="ml5"> 总收益 </span>
+        <span class="fw">{{ userInfo.balance }} {{ userInfo.state }}元</span>
         <span class="right-arrow mr5"></span>
       </div>
     </div>
     <div class="my-content-bottom mt3">
       <ul>
-        <router-link tag="li" to="/bind">
+        <li @click="toAuth">
           <div class="layoutFlex">
             <img src="@/assets/img/zhangset.png" alt="" />
-            <span class="txt tal ml3">账户设置</span>
+            <span class="txt tal ml3">实名认证</span>
             <span class="right-arrow mr2"></span>
           </div>
-        </router-link>
-        <router-link tag="li" to="/bind">
+        </li>
+        <li @click="toWallet">
           <div class="layoutFlex">
             <img src="@/assets/img/money.png" alt="" />
             <span class="txt tal ml3">我的钱包</span>
             <span class="right-arrow mr2"></span>
           </div>
-        </router-link>
-        <router-link tag="li" to="/bind">
+        </li>
+
+        <li @click="toCollect">
           <div class="layoutFlex">
             <img src="@/assets/img/collect.png" alt="" />
             <span class="txt tal ml3">我的收藏</span>
             <span class="right-arrow mr2"></span>
           </div>
-        </router-link>
-        <router-link tag="li" to="/bind">
+        </li>
+
+        <li @click="toHelp">
           <div class="layoutFlex">
             <img src="@/assets/img/help.png" alt="" />
             <span class="txt tal ml3">帮助反馈</span>
             <span class="right-arrow mr2"></span>
           </div>
-        </router-link>
-        <router-link tag="li" to="/bind">
+        </li>
+
+        <li @click="toAbout">
           <div class="layoutFlex">
             <img src="@/assets/img/about.png" alt="" />
             <span class="txt tal ml3">关于我们</span>
             <span class="right-arrow mr2"></span>
           </div>
-        </router-link>
+        </li>
       </ul>
     </div>
-    <div class="signUp mt10" @click="signUpFnc">退出账户</div>
+    <!-- <div class="signUp mt10" @click="signUpFnc">退出账户</div> -->
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import comNav from "@/components/nav/comNav";
 export default {
   name: "my",
   components: {
     comNav
+    // Confirm
+  },
+  computed: {
+    ...mapState({
+      userInfo: res => res.userInfo
+    })
   },
   methods: {
     signUpFnc() {
-      this.$router.push("./login");
+      if (!this.userInfo.cellphone) {
+        console.log("1");
+      } else {
+        this.$router.push("./login");
+      }
+    },
+    haveTel() {
+      return !this.userInfo.cellphone ? true : false;
+    },
+    // 去实名认证
+    toAuth() {
+      let r = this.haveTel() ? "/login" : "/auth";
+      this.$router.push(r);
+    },
+    // 去钱包
+    toWallet() {
+      let r = this.haveTel() ? "/login" : "/wallet";
+      this.$router.push(r);
+    },
+    // 去收藏
+    toCollect() {
+      let r = this.haveTel() ? "/login" : "/collect";
+      this.$router.push(r);
+    },
+    // 去帮助反馈
+    toHelp() {
+      let r = this.haveTel() ? "/login" : "/bind";
+      this.$router.push(r);
+    },
+    // 去关于
+    toAbout() {
+      let r = this.haveTel() ? "/login" : "/about";
+      this.$router.push(r);
     }
   }
 };

@@ -6,9 +6,8 @@ Vue.use(Router);
 
 export default new Router({
   mode: "history",
-  base: process.env.BASE_URL,
-  routes: [
-    {
+  base: "/zb/",
+  routes: [{
       path: "/",
       name: "home",
       component: Home
@@ -16,50 +15,74 @@ export default new Router({
     {
       path: "/about",
       name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
+        import ( /* webpackChunkName: "about" */ "./views/About.vue")
     },
     {
       path: "/login",
       name: "login",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Login.vue")
+        import ( /* webpackChunkName: "about" */ "./views/Login.vue")
     },
     {
       path: "/search",
       name: "search",
-      component: () => import("./views/Search.vue")
+      component: () =>
+        import ("./views/Search.vue")
     },
     {
       path: "/my",
       name: "my",
-      component: () => import("./views/My.vue")
+      component: () =>
+        import ("./views/My.vue")
     },
     {
       path: "/bind",
       name: "bind",
-      component: () => import("./views/Bind.vue")
+      component: () =>
+        import ("./views/Bind.vue")
     },
     {
       path: "/detail",
       name: "detail",
-      component: () => import("./views/Detail.vue")
+      component: () =>
+        import ("./views/Detail.vue")
     },
     {
       path: "/sign",
       name: "sign",
-      component: () => import("./views/Sign.vue")
+      component: () =>
+        import ("./views/Sign.vue")
     },
     {
       path: "/wallet",
       name: "wallet",
-      component: () => import("./views/Wallet.vue")
+      component: () =>
+        import ("./views/Wallet.vue")
+    },
+    {
+      path: "/auth",
+      name: "auth",
+      component: () =>
+        import ("./views/Auth.vue")
+    },
+    {
+      path: "/city",
+      name: "city",
+      component: () =>
+        import ("./views/City.vue")
+    },
+    {
+      path: "/collect",
+      name: "collect",
+      component: () =>
+        import ("./views/Collect.vue")
+    },
+    {
+      path: "/map",
+      name: "map",
+      component: () =>
+        import ("./views/Map.vue")
     }
   ]
 });

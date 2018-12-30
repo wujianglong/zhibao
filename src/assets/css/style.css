@@ -20,6 +20,11 @@ html {
   touch-action:none;
 }
 
+html,body{
+  height: 100%;
+  width: 100%;
+}
+
 body {
   background: #f4f4f4;
 }
