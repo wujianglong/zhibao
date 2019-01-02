@@ -4,20 +4,25 @@
     <div class="my-content-top">
       <div class="content-top-t layoutFlex">
         <div class="user-img">
-          <img
-            src="https://avatars0.githubusercontent.com/u/141232?v=4"
-            alt=""
-          />
+          <img src="@/assets/img/Default.png" alt="" />
         </div>
         <div class="user-info tal ml5">
-          <p class="user-info-name">工地上的手艺人(暂无此数据)</p>
-          <p>初级工友情 ID：{{ userInfo.id }}</p>
+          <p class="user-info-name" v-if="userInfo.cellphone">
+            {{ userInfo.cellphone }}(<span style="color:rgb(100,222,173)">{{
+              userInfo.job_state
+            }}</span
+            >)
+          </p>
+          <router-link tag="p" to="/login" v-if="!userInfo.cellphone"
+            >去绑定账号</router-link
+          >
+          <p>ID：{{ userInfo.id }}</p>
         </div>
         <div class="user-set"></div>
       </div>
       <div class="profit layoutFlex">
         <span class="ml5"> 总收益 </span>
-        <span class="fw">{{ userInfo.balance }} {{ userInfo.state }}元</span>
+        <span class="fw">{{ userInfo.balance }}元</span>
         <span class="right-arrow mr5"></span>
       </div>
     </div>
@@ -89,7 +94,8 @@ export default {
       }
     },
     haveTel() {
-      return !this.userInfo.cellphone ? true : false;
+      return false;
+      // return !this.userInfo.cellphone ? true : false;
     },
     // 去实名认证
     toAuth() {

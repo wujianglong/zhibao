@@ -3,27 +3,24 @@
     <comNav msg="我的收藏"></comNav>
     <div class="collect-content">
       <ul>
-        <li>
+        <li v-for="(item, index) in data" :key="index">
           <div class="layoutFlex">
-            <div>
-              <img
-                src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-                alt=""
-              />
-            </div>
+            <div><img :src="item.enterprise.img_urls[0]" alt="" /></div>
             <div class="tal">
-              <p class="name">南昌环宇兴鑫招聘电焊工</p>
+              <p class="name">{{ item.enterprise.name }}</p>
               <p class="detail">
-                <span>电焊工</span><span>18-40</span><span>男女不限</span>
+                <span>{{ item.station }}</span
+                ><span>{{ item.age }}</span>
+                <!-- <span>男女不限</span> -->
               </p>
               <p class="salary">
-                <span class="fl color1">4500-6000/月</span>
-                <span class="fr mr5">2018-09-11</span>
+                <span class="fl color1">{{ item.salary }}/月</span>
+                <span class="fr mr5">{{ item.created_at.split("T")[0] }}</span>
               </p>
             </div>
           </div>
         </li>
-        <li>
+        <!-- <li>
           <div class="layoutFlex">
             <div></div>
             <div>
@@ -43,7 +40,7 @@
               </p>
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
@@ -53,12 +50,18 @@ import comNav from "@/components/nav/comNav";
 export default {
   name: "collect",
   data() {
-    return {};
+    return {
+      data: []
+    };
   },
   components: {
     comNav
   },
-  created() {}
+  created() {
+    this.$api.collect().then(res => {
+      this.data = res.results;
+    });
+  }
 };
 </script>
 <style lang="stylus" scoped>

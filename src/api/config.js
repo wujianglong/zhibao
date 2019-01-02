@@ -81,5 +81,26 @@ export default {
           reject(error);
         });
     });
+  },
+  askDelete: function(url, params) {
+    return new Promise((resolve, reject) => {
+      if (window.localStorage.token) {
+        axios.defaults.headers.common["Authorization"] =
+          "Bearer " + window.localStorage.token;
+      }
+      axios
+        .delete(url, params)
+        .then(
+          response => {
+            resolve(response.data);
+          },
+          err => {
+            reject(err);
+          }
+        )
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 };

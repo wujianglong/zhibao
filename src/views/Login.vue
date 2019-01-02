@@ -18,7 +18,7 @@
           />
         </div>
         <div class="layoutFlex code mt5">
-          <input type="text" placeholder="请输入验证码" />
+          <input type="text" v-model="code" placeholder="请输入验证码" />
           <div class="getCode tac" @click="getCode">{{ codeTxt }}</div>
         </div>
       </div>
@@ -27,18 +27,50 @@
   </div>
 </template>
 <script>
+import { Toast } from "mint-ui";
 export default {
   name: "login",
   data() {
     return {
       tel: "",
+      code: "",
       codeTxt: "获取验证码",
       verifyFlag: false
     };
   },
   methods: {
     loginFnc() {
-      this.$router.push("/");
+      if (!this.tel || !this.code) {
+        Toast({
+          message: "手机号与验证码不能为空",
+          position: "bottom",
+          duration: 2000
+        });
+      } else {
+        this.$api
+          .bind({
+            cellphone: this.tel,
+            code: this.code
+          })
+          .then(res => {
+            if (res.message.includes("成功")) {
+              Toast({
+                message: res.message,
+                position: "bottom",
+                duration: 2000
+              });
+              localStorage.setItem("cellPhone", this.tel);
+              this.$router.push("/");
+            } else {
+              Toast({
+                message: "绑定失败",
+                position: "bottom",
+                duration: 2000
+              });
+            }
+          })
+          .catch(() => {});
+      }
     },
     getCode() {
       let z = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
@@ -59,7 +91,7 @@ export default {
         });
 
         this.verifyFlag = true;
-        let i = 5;
+        let i = 60;
         this.codeTxt = `${i}s`;
         let inter = setInterval(() => {
           if (i <= 0) {

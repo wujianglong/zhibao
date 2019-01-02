@@ -8,29 +8,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    banner_info: [{
-        id: 1,
-        rank: 1,
-        title: "title",
-        content: "content",
-        img_url: "https://dl.duoduocp.cn/img/1a71a6f8e8fbf6f2ce07d1349df08d4f.png",
-        h5_url: null,
-        state: "show",
-        created_at: "2018-10-23T21:43:37.142191",
-        updated_at: "2018-10-23T21:43:37.146541"
-      },
-      {
-        id: 1,
-        rank: 1,
-        title: "title",
-        content: "content",
-        img_url: "https://dl.duoduocp.cn/img/302878191642780c44e8f502264a42c5.png",
-        h5_url: null,
-        state: "show",
-        created_at: "2018-10-23T21:43:37.142191",
-        updated_at: "2018-10-23T21:43:37.146541"
-      }
-    ],
+    banner_info: [],
     recruitments: {
       count: 1,
       next: null,
@@ -178,11 +156,23 @@ export default new Vuex.Store({
     getInfo({ commit }) {
       return api.information().then(res => {
         commit("userInfo", res);
+        // 手机号码
         if (!res.cellphone) {
           localStorage.setItem("cellPhone", "");
         } else {
           localStorage.setItem("cellPhone", res.cellphone);
         }
+        // 是否实名认证
+        localStorage.setItem("has_identification", res.has_identification);
+        // 是否绑定银行卡
+        localStorage.setItem("has_bind_bank", res.has_bind_bank);
+
+        // 工作状态
+        // not-enrolled：未报名
+        // enrolled：已报名
+        // in-service：已入职
+        // dimission：已离职
+        localStorage.setItem("job_state", res.job_state);
       });
     },
     // 获取token

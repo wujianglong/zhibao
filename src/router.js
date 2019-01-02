@@ -83,6 +83,18 @@ export default new Router({
       name: "map",
       component: () =>
         import ("./views/Map.vue")
+    },
+    {
+      path: "/withdraw",
+      name: "withdraw",
+      component: () =>
+        import ("./views/Withdraw.vue")
+    },
+    {
+      path: "/salary",
+      name: "salary",
+      component: () =>
+        import ("./views/Salary.vue")
     }
   ]
 });

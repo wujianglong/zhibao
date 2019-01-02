@@ -2,27 +2,35 @@
   <div class="auth">
     <comNav msg="实名认证" />
     <div class="auth-content">
-      <ul>
+      <!-- <ul>
         <li>
-          <span> 真实姓名: </span>
+          <span class="leftSpan"> 真实姓名: </span>
           <input type="text" placeholder="您的真实姓名" />
         </li>
+        <li><span class="leftSpan"> 手机号码: </span> <input type="text" /></li>
         <li>
-          <span> 手机号码: </span> <input type="radio" />男
-          <input type="radio" />女 <input type="radio" id="radio1" />
+          <span class="leftSpan"> 性别: </span>男
+          <input type="radio" v-model="sex" value="man" />女
+          <input type="radio" v-model="sex" value="women" id="radio1" />
         </li>
         <li>
-          <span> 身份证号: </span>
+          <span class="leftSpan"> 身份证号: </span>
           <input type="text" placeholder="输入身份证号码" />
         </li>
-      </ul>
+      </ul> -->
     </div>
     <div class="middle">拍摄您的第二代身份证原件,请确保图片清晰,四角完整</div>
     <div class="photo">
       <p class="mt3 mb3">身份证正面</p>
-      <div><img src="@/assets/img/photo.png" alt="" /></div>
+      <div>
+        <img v-if="front_img_url" src="front_img_url" alt="" />
+        <img v-if="!front_img_url" src="@/assets/img/photo.png" alt="" />
+      </div>
       <p class="mt3 mb3">身份证反面</p>
-      <div class="mb3"><img src="@/assets/img/photo.png" alt="" /></div>
+      <div class="mb3">
+        <img v-if="back_img_url" src="front_img_url" alt="" />
+        <img v-if="!back_img_url" src="@/assets/img/photo.png" alt="" />
+      </div>
       <div class="authBtn mt10 mb20">立即认证</div>
     </div>
   </div>
@@ -31,8 +39,27 @@
 import comNav from "@/components/nav/comNav";
 export default {
   name: "auth",
+  data() {
+    return {
+      sex: "man",
+      front_img_url: "",
+      back_img_url: ""
+    };
+  },
   components: {
     comNav
+  },
+  created() {
+    // 获取身份证信息
+    this.update();
+  },
+  methods: {
+    update() {
+      this.$api.getIdentification().then(res => {
+        this.front_img_url = res.front_img_url;
+        this.back_img_url = res.back_img_url;
+      });
+    }
   }
 };
 </script>
@@ -73,4 +100,11 @@ export default {
     color #fff
     width 80%
     margin-left 10%
+.leftSpan
+  display inline-block
+  width 200px
+input[type=radio]
+  -webkit-appearance radio
+  margin-left 30px!important
+  margin-right 80px!important
 </style>

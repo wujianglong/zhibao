@@ -13,15 +13,14 @@
           </p>
           <p class="color1 mt1">{{ recruitmentsId.salary }}/月</p>
         </div>
-        <div class="factory-location mt3">
+        <div class="factory-location mt3" @click="toMap">
           <div>
             <p><img src="" alt="" />{{ recruitmentsId.enterprise.name }}</p>
             <p class="mt1">{{ recruitmentsId.enterprise.address }}</p>
           </div>
-          <div class="right-arrow"></div>
+          <!-- <div class="right-arrow"></div> -->
         </div>
       </div>
-      <div>dwq</div>
       <!-- 岗位描述 -->
       <div class="desc tal mt5">
         <div class="header layoutFlex mb3">
@@ -31,34 +30,47 @@
         <div class="require">
           <p class="mb3">入职要求：</p>
           <ul>
-            <li>1、年满18周岁以上，年龄18-45周岁为佳。</li>
+            <!-- <li>1、年满18周岁以上，年龄18-45周岁为佳。</li>
             <li>2、必须身体健康，没有任何传染性疾病，女性无怀孕者。</li>
             <li>3、必须持有本人真实身份证有效证件。</li>
-            <li>4、工资时间不低于260小时。</li>
+            <li>4、工资时间不低于260小时。</li> -->
+            <li>{{ recruitmentsId.requirement }}</li>
+          </ul>
+          <p class="mb3 mt5">我能赚多少：</p>
+          <ul>
+            <li>综合工资:{{ recruitmentsId.salary }}</li>
+            <li>工资时薪:{{ recruitmentsId.wage }}</li>
           </ul>
           <p class="mb3 mt5">福利待遇：</p>
           <ul>
-            <li>1、伙食情况：包吃，菜色多样，自由选择。</li>
+            <!-- <li>1、伙食情况：包吃，菜色多样，自由选择。</li>
             <li>2、住宿情况：包住，公司员工四人间宿舍，水电平摊。</li>
-            <li>3、公司缴纳五险一金。</li>
+            <li>3、公司缴纳五险一金。</li> -->
+            <li>伙食情况:{{ recruitmentsId.meals }}</li>
+            <li>住宿情况:{{ recruitmentsId.commodity }}</li>
           </ul>
         </div>
       </div>
       <!-- 企业介绍 -->
       <div class="desc tal mt5">
         <div class="header layoutFlex mb3">
-          <img src="@/assets/img/zu.png" alt="" /> <span>岗位描述</span>
+          <img src="@/assets/img/zu.png" alt="" /> <span>工作内容</span>
           <div></div>
         </div>
         <div class="require">
           <ul>
-            <li>
-              南昌环宇兴鑫建材有限公司，公司主要生产建筑材料，通用机械、金
-              属材料、劳保用品、服装、针纺品加工销售；机械电脑印花；自营和
-              代理商品技术的进出口、但国家限定公司经营或禁止进出品的商品技
-              术除外。
-            </li>
+            <li>{{ recruitmentsId.content }}</li>
           </ul>
+        </div>
+      </div>
+
+      <!-- 加入收藏/立即报名 -->
+      <div class="bottomBtn layoutFlex">
+        <div class="joinCollect" @click="toJoin">
+          {{ recruitmentsId.has_favorite ? "已收藏" : "加入收藏" }}
+        </div>
+        <div class="signUp" @click="toSign">
+          {{ recruitmentsId.has_enrollment ? "已报名" : "立即报名" }}
         </div>
       </div>
     </div>
@@ -67,15 +79,126 @@
 <script>
 import comNav from "@/components/nav/comNav";
 import { mapState } from "vuex";
+import { MessageBox, Toast } from "mint-ui";
+// import { MessageBox } from "mint-ui";
 export default {
   name: "detail",
+  data() {
+    return {
+      recruitmentsId: []
+    };
+  },
   computed: {
     ...mapState({
-      recruitmentsId: res => res.recruitmentsId
+      // recruitmentsId: res => res.recruitmentsId
+      // recruitments: []
     })
   },
   components: {
     comNav
+  },
+  created() {
+    this.update();
+  },
+  methods: {
+    update() {
+      this.$api.recruitmentsId(this.$route.query.id).then(res => {
+        this.recruitmentsId = res;
+      });
+    },
+    toMap() {
+      this.$router.push("/map");
+    },
+    toJoin() {
+      let id = this.recruitmentsId.id;
+      let f = this.recruitmentsId.has_favorite;
+
+      // this.$api.cancelRenrollment(id).then(() => {
+      //   Toast({
+      //     message: "取消报名成功",
+      //     position: "bottom",
+      //     duration: 2000
+      //   });
+      //   this.update();
+      // });
+
+      if (f) {
+        // 取消收藏
+        this.$api.cancelFavorite(id).then(() => {
+          Toast({
+            message: "取消收藏成功",
+            position: "bottom",
+            duration: 2000
+          });
+          this.update();
+        });
+      } else {
+        // 收藏
+        this.$api.favorite(id).then(() => {
+          Toast({
+            message: "收藏成功",
+            position: "bottom",
+            duration: 2000
+          });
+          this.update();
+        });
+      }
+    },
+    toSign() {
+      let id = this.recruitmentsId.id;
+      let f = this.recruitmentsId.has_enrollment;
+      let c = f ? "是否取消报名？" : "确认报名？";
+
+      // this.$api.renrollment(id).then(() => {
+      //   Toast({
+      //     message: "报名成功",
+      //     position: "bottom",
+      //     duration: 2000
+      //   });
+      //   this.update();
+      // });
+
+      if (!localStorage.cellPhone) {
+        this.$router.push("/login");
+        return false;
+      } else if (
+        (localStorage.getItem("job_state") === "enrolled" ||
+          localStorage.getItem("job_state") === "in-service") &&
+        !this.recruitmentsId.has_enrollment
+      ) {
+        // 是否  跳往  已经报名厂商列表
+        Toast({
+          message: "您已经报名过，不能重复再报",
+          position: "bottom",
+          duration: 2000
+        });
+        return false;
+      }
+
+      MessageBox.confirm(c).then(() => {
+        if (f) {
+          // 取消报名
+          this.$api.cancelRenrollment(id).then(() => {
+            Toast({
+              message: "取消报名成功",
+              position: "bottom",
+              duration: 2000
+            });
+            this.update();
+          });
+        } else {
+          // 报名
+          this.$api.renrollment(id).then(() => {
+            Toast({
+              message: "报名成功",
+              position: "bottom",
+              duration: 2000
+            });
+            this.update();
+          });
+        }
+      });
+    }
   }
 };
 </script>
@@ -91,6 +214,7 @@ export default {
   background #fff
   .detail-content
     padding-top 100px
+    padding-bottom 84px
     .detail-img
       img
         width 100%
@@ -134,4 +258,22 @@ export default {
         border-top 2px solid #ececec
     ul
       color #999
+  .right-arrow
+    width 20px
+    height 20px
+    border 1px solid #ccc
+.bottomBtn
+  height 84px
+  line-height 84px
+  position fixed
+  bottom 0
+  font-size 36px
+  width 100%
+  color #fff
+  .joinCollect
+    background #ffb54d
+    flex 1
+  .signUp
+    background rgba(255,120,24,1)
+    flex 1
 </style>

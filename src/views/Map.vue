@@ -15,6 +15,7 @@ export default {
     this.$nextTick(function() {
       let map = new BMap.Map("map-content");
       let point = new BMap.Point(116.400244, 39.92556);
+
       map.centerAndZoom(point, 12);
       let marker = new BMap.Marker(point); // 创建标注
       map.addOverlay(marker); // 将标注添加到地图中

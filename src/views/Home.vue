@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="homeNav layoutFlex">
-      <div class="nav-provice ml3">
+      <div class="nav-provice ml3" @click="toCity">
         <span> 江西省</span> <span class="nav-arrow ml1"> </span>
       </div>
       <div class="nav-input" @click="toSearch">
@@ -44,15 +44,15 @@
       <div class="news">
         <div class="news-content layoutFlex">
           <div class="news-img"><img src="@/assets/img/news.png" alt="" /></div>
-          <div class="news-txt ml3">
-            <p>
-              <span class="color1 mr5">2018-10-31</span>
-              <span>恭喜王师傅完成项目</span>
-            </p>
-            <p>
-              <span class="color1 mr5">2018-10-31</span>
-              <span>恭喜王师傅完成项目</span>
-            </p>
+          <div class="news-txt-parents">
+            <div class="news-txt ml3" :style="{ top, transition }">
+              <p class="cb" v-for="(item, index) in notifyList" :key="index">
+                <span class="color1 ml5 fl">{{
+                  item.created_at.split("T")[0]
+                }}</span>
+                <span class="fl ml5">{{ item.title }}</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
         <ul>
           <router-link
             tag="li"
-            to="/detail"
+            :to="'/detail?id=' + item.id"
             v-for="(item, index) in recruitments"
             :key="index"
           >
@@ -83,7 +83,8 @@
               <div class="work-txt mt3 mb3 ml3 tal">
                 <p class="factory">{{ item.enterprise.name }}</p>
                 <p class="age">
-                  年龄：<span>{{ item.age }}</span> 性别：<span>男女不限</span>
+                  年龄：<span>{{ item.age }}</span>
+                  <!-- 性别：<span>男女不限</span> -->
                 </p>
                 <p class="salary">
                   薪资：<span class="color1">{{ item.salary }}</span>
@@ -121,9 +122,44 @@ export default {
         pagination: {
           el: ".swiper-pagination",
           clickable: true
-        },
-        recruitments: []
-      }
+        }
+      },
+      recruitments: [],
+      activeIndex: 0,
+      notifyList: [
+        // {
+        //   id: 1,
+        //   title: "title1",
+        //   content: "content11",
+        //   state: "show",
+        //   created_at: "2018-10-23T21:43:37.142191",
+        //   updated_at: "2018-10-23T21:43:37.146541"
+        // },
+        // {
+        //   id: 2,
+        //   title: "title2",
+        //   content: "content22",
+        //   state: "show",
+        //   created_at: "2018-10-23T21:43:37.142191",
+        //   updated_at: "2018-10-23T21:43:37.146541"
+        // },
+        // {
+        //   id: 1,
+        //   title: "title3",
+        //   content: "content11",
+        //   state: "show",
+        //   created_at: "2018-10-23T21:43:37.142191",
+        //   updated_at: "2018-10-23T21:43:37.146541"
+        // },
+        // {
+        //   id: 2,
+        //   title: "title4",
+        //   content: "content22",
+        //   state: "show",
+        //   created_at: "2018-10-23T21:43:37.142191",
+        //   updated_at: "2018-10-23T21:43:37.146541"
+        // }
+      ]
     };
   },
   components: {
@@ -136,25 +172,49 @@ export default {
       banner_info: res => res.banner_info,
       // recruitments: res => res.recruitments,
       userInfo: res => res.userInfo
-    })
+    }),
+    top() {
+      return -this.activeIndex * 16 + "px";
+    },
+    transition() {
+      return this.activeIndex === 0 ? "none" : "top 0.5s";
+    }
   },
   created() {
     // 获取banner
     this.$store.dispatch("getBanner");
 
+    // 获取公告 notices
+    this.$api.notices().then(res => {
+      this.notifyList = res;
+    });
+
     // 获取列表厂商信息
-    // console.log(this.$api);
     this.$api
       .recruitments()
       .then(res => {
-        // this.$set(this.recruitments, res.results);
         this.recruitments = res.results;
       })
       .catch(() => {});
   },
+  mounted() {
+    setInterval(() => {
+      this.notifyList.push(this.notifyList[0]);
+      this.activeIndex += 1;
+    }, 3000);
+    setTimeout(() => {
+      setInterval(() => {
+        this.notifyList.splice(0, 1);
+        this.activeIndex = 0;
+      }, 3000);
+    }, 500);
+  },
   methods: {
     toSearch() {
       this.$router.push({ path: "/search" });
+    },
+    toCity() {
+      this.$router.push({ path: "/city" });
     }
   }
 };
@@ -214,17 +274,28 @@ export default {
       height 118px
       border-top 0.5px solid #ececec
       .news-content
+        position relative
         height 100%
         align-items center
         width 90%
         margin-left 5%
         .news-img
-          width 73px
+          width 93px
+          border-right 1px solid rgb(220,220,220)
+          padding-right 20px
           img
             width 100%
-        .news-txt
-          border-left 0.5px solid #ececec
-          padding-left 0.5rem
+        .news-txt-parents
+          position relative
+          height 64px
+          overflow hidden
+          width 100%
+          .news-txt
+            height 64px
+            position: absolute;
+            top 16px
+            left 0
+            right 0
   .bottom-content
     background #fff
     color #fff

@@ -2,12 +2,14 @@
   <div class="footer">
     <ul class="layoutFlex">
       <li><img src="@/assets/img/home.png" alt="" /> <span>首页</span></li>
-      <router-link tag="li" to="/sign">
+      <!-- <router-link tag="li" to="/sign"> </router-link>
+      <router-link tag="li" to="/wallet"> </router-link> -->
+      <li @click="toSign">
         <img src="@/assets/img/baoming.png" alt="" /> <span>报名</span>
-      </router-link>
-      <router-link tag="li" to="/wallet">
+      </li>
+      <li @click="toWallet">
         <img src="@/assets/img/money-default.png" alt="" /> <span>钱包</span>
-      </router-link>
+      </li>
       <router-link tag="li" to="/my">
         <img src="@/assets/img/me-default.png" alt="" /> <span>我的</span>
       </router-link>
@@ -20,6 +22,22 @@ export default {
   name: "footerCom",
   props: {
     msg: String
+  },
+  methods: {
+    toSign() {
+      if (!localStorage.cellPhone) {
+        this.$router.push("/login");
+      } else {
+        this.$router.push("/sign");
+      }
+    },
+    toWallet() {
+      if (!localStorage.cellPhone) {
+        this.$router.push("/login");
+      } else {
+        this.$router.push("/wallet");
+      }
+    }
   }
 };
 </script>
