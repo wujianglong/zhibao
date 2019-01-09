@@ -1,23 +1,17 @@
 <template>
   <div class="auth">
-    <comNav msg="提现列表" />
+    <comNav msg="薪资明细" />
     <div class="auth-content">
       <ul>
-        <!-- [
-    {
-      "id": 1,
-      "amount": "1.00",
-      "state": "pending",
-      "created_at": "2018-11-16T10:09:22.542360",
-      "updated_at": "2018-11-16T10:09:22.542497"
-    }
-  ] -->
         <li class="layoutFlex" v-for="(item, index) in data" :key="index">
           <span>提现金额：{{ item.amount }}</span>
           <span>{{ item.state | status }}</span
           ><span>{{ item.created_at.split("T")[0] }}</span>
         </li>
       </ul>
+      <div v-if="data.length === 0" style="margin-top:40px">
+        <img src="../assets/img/empty.png" alt="" />
+      </div>
     </div>
   </div>
 </template>
@@ -27,22 +21,6 @@ export default {
   name: "auth",
   data() {
     return {
-      // data: [
-      //   {
-      //     id: 1,
-      //     amount: "1.00",
-      //     state: "pending",
-      //     created_at: "2018-11-16T10:09:22.542360",
-      //     updated_at: "2018-11-16T10:09:22.542497"
-      //   },
-      //   {
-      //     id: 1,
-      //     amount: "1.00",
-      //     state: "pending",
-      //     created_at: "2018-11-16T10:09:22.542360",
-      //     updated_at: "2018-11-16T10:09:22.542497"
-      //   }
-      // ]
       data: []
     };
   },

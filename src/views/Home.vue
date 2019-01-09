@@ -2,7 +2,7 @@
   <div class="home">
     <div class="homeNav layoutFlex">
       <div class="nav-provice ml3" @click="toCity">
-        <span> 江西省</span> <span class="nav-arrow ml1"> </span>
+        <span>{{ region.province }}</span> <span class="nav-arrow ml1"> </span>
       </div>
       <div class="nav-input" @click="toSearch">
         <input type="text" placeholder="搜索" />
@@ -21,19 +21,19 @@
       <div class="list mt3">
         <div>
           <ul class="layoutFlex">
-            <li>
+            <router-link tag="li" to="/city">
               <img src="@/assets/img/country.png" alt="" />
               <p>地区工作</p>
-            </li>
-            <li>
+            </router-link>
+            <li @click="toOther">
               <img src="@/assets/img/marry.png" alt="" />
               <p>婚恋交友</p>
             </li>
-            <li>
+            <li @click="toOther">
               <img src="@/assets/img/xinshou.png" alt="" />
               <p>新手引导</p>
             </li>
-            <li>
+            <li @click="toOther">
               <img src="@/assets/img/invite.png" alt="" />
               <p>邀请有礼</p>
             </li>
@@ -61,10 +61,22 @@
       <div class="filter">
         <div class="filter-content">
           <ul class="layoutFlex">
-            <li>区域 <img src="@/assets/img/scopy.png" alt="" /></li>
-            <li>工种 <img src="@/assets/img/scopy.png" alt="" /></li>
-            <li>薪资 <img src="@/assets/img/scopy.png" alt="" /></li>
-            <li>排序 <img src="@/assets/img/scopy.png" alt="" /></li>
+            <li @click="fliterFnc(0);">
+              {{ filterForm.area ? selectArea[filterForm.area - 1] : "区域" }}
+              <img src="@/assets/img/scopy.png" alt="" />
+            </li>
+            <li @click="fliterFnc(1);">
+              {{ filterForm.role ? role[filterForm.role] : "工种" }}
+              <img src="@/assets/img/scopy.png" alt="" />
+            </li>
+            <li @click="fliterFnc(2);">
+              {{ filterForm.salary ? salary[filterForm.salary] : "薪资" }}
+              <img src="@/assets/img/scopy.png" alt="" />
+            </li>
+            <li @click="fliterFnc(3);">
+              {{ filterForm.sort ? filterForm.sort : "排序" }}
+              <img src="@/assets/img/scopy.png" alt="" />
+            </li>
           </ul>
         </div>
       </div>
@@ -81,16 +93,21 @@
                 <img :src="item.enterprise.img_urls" alt="" />
               </div>
               <div class="work-txt mt3 mb3 ml3 tal">
-                <p class="factory">{{ item.enterprise.name }}</p>
+                <p class="factory">{{ item.title }}</p>
                 <p class="age">
-                  年龄：<span>{{ item.age }}</span>
-                  <!-- 性别：<span>男女不限</span> -->
+                  年龄：<span>{{ `${item.age_begin}-${item.age_end}` }}</span>
+                  性别：<span v-if="Number(item.gender) === 0">男女不限</span
+                  ><span v-if="Number(item.gender) === 1">男</span
+                  ><span v-if="Number(item.gender) === 2">女</span>
                 </p>
                 <p class="salary">
                   薪资：<span class="color1">{{ item.salary }}</span>
                 </p>
                 <div class="signUp layoutFlex">
-                  <span> 报名<label class="color1">22</label>人 </span>
+                  <span>
+                    报名<label class="color1">{{ item.enrollment_count }}</label
+                    >人
+                  </span>
                   <button>招工中</button>
                 </div>
               </div>
@@ -99,6 +116,73 @@
         </ul>
       </div>
     </div>
+    <!-- 筛选 -->
+    <div class="navFilter" v-show="filterFlag">
+      <div class="navFilter-header layoutFlex">
+        <div class="qr" @click="filterQr">确认</div>
+        <div class="select">
+          请选择<span v-show="filterIndex === 0">区域</span>
+          <span v-show="filterIndex === 1">职位</span>
+          <span v-show="filterIndex === 2">薪资</span>
+          <span v-show="filterIndex === 3">排序</span>
+        </div>
+        <div class="cancel" @click="filterCancle">取消</div>
+      </div>
+      <ul class="navFilter-content">
+        <li v-if="filterIndex === 0" class="layoutFlex">
+          <div
+            @click="areaSelect(0);"
+            :class="filterForm.area === 0 ? 'color2' : ''"
+          >
+            全部
+          </div>
+          <div
+            v-for="(item, index) in selectArea"
+            :key="index"
+            @click="areaSelect(index + 1);"
+            :class="filterForm.area === index + 1 ? 'color2' : ''"
+          >
+            {{ item }}
+          </div>
+
+          <!--
+            <div
+              @click="areaSelect('新建区');"
+              :class="filterForm.area === '新建区' ? 'color2' : ''"
+            >
+              新建区
+            </div>
+            <div
+              @click="areaSelect('南昌县');"
+              :class="filterForm.area === '南昌县' ? 'color2' : ''"
+            >
+              南昌县
+            </div>
+          -->
+        </li>
+        <li v-if="filterIndex === 1" class="layoutFlex">
+          <div
+            @click="roleSelect(index);"
+            v-for="(item, index) in role"
+            :class="filterForm.role === index ? 'color2' : ''"
+            :key="index"
+          >
+            {{ item }}
+          </div>
+        </li>
+        <li v-if="filterIndex === 2" class="layoutFlex">
+          <div
+            @click="salarySelect(index);"
+            :class="filterForm.salary === index ? 'color2' : ''"
+            v-for="(item, index) in salary"
+            :key="index"
+          >
+            {{ item }}
+          </div>
+        </li>
+        <li v-if="filterIndex === 3" class="layoutFlex"><div>最新更新</div></li>
+      </ul>
+    </div>
     <footerCom></footerCom>
   </div>
 </template>
@@ -106,6 +190,8 @@
 import { mapState } from "vuex";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import footerCom from "@/components/footer/footer.vue";
+import cityJson from "@/assets/js/city.js";
+import { Toast } from "mint-ui";
 export default {
   name: "home",
   data() {
@@ -159,7 +245,37 @@ export default {
         //   created_at: "2018-10-23T21:43:37.142191",
         //   updated_at: "2018-10-23T21:43:37.146541"
         // }
-      ]
+      ],
+      selectArea: [],
+      role: [
+        "全部",
+        "普通就业",
+        "协警",
+        "机器人专区",
+        "保安专区",
+        "辅警",
+        "工程师",
+        "计算机专业",
+        "机器人视觉",
+        "临时工",
+        "尖端职业"
+      ],
+      salary: [
+        "全部",
+        "3000以下",
+        "3000-4000",
+        "4000-6000",
+        "5000-8000",
+        "8000以上"
+      ],
+      filterIndex: 0,
+      filterFlag: false,
+      filterForm: {
+        area: "",
+        role: "",
+        salary: "",
+        sort: ""
+      }
     };
   },
   components: {
@@ -171,7 +287,8 @@ export default {
     ...mapState({
       banner_info: res => res.banner_info,
       // recruitments: res => res.recruitments,
-      userInfo: res => res.userInfo
+      userInfo: res => res.userInfo,
+      region: res => res.region
     }),
     top() {
       return -this.activeIndex * 16 + "px";
@@ -180,24 +297,48 @@ export default {
       return this.activeIndex === 0 ? "none" : "top 0.5s";
     }
   },
+  watch: {
+    region() {
+      let c = cityJson.c.filter(o => {
+        return o.name === this.region.province;
+      });
+
+      let c1 = c[0].city.filter(o => {
+        return o.name === this.region.city;
+      });
+
+      this.selectArea = c1[0].area;
+
+      this.filterQr();
+    }
+  },
   created() {
     // 获取banner
+    this.filterQr();
     this.$store.dispatch("getBanner");
-
-    // 获取公告 notices
     this.$api.notices().then(res => {
       this.notifyList = res;
     });
-
-    // 获取列表厂商信息
-    this.$api
-      .recruitments()
-      .then(res => {
-        this.recruitments = res.results;
-      })
-      .catch(() => {});
   },
   mounted() {
+    let c = cityJson.c.filter(o => {
+      return o.name === this.region.province;
+    });
+
+    let c1 = c[0].city.filter(o => {
+      return o.name === this.region.city;
+    });
+
+    this.selectArea = c1[0].area;
+
+    // 获取列表厂商信息
+    // this.$api
+    //   .recruitments()
+    //   .then(res => {
+    //     this.recruitments = res.results;
+    //   })
+    //   .catch(() => {});
+
     setInterval(() => {
       this.notifyList.push(this.notifyList[0]);
       this.activeIndex += 1;
@@ -213,15 +354,124 @@ export default {
     toSearch() {
       this.$router.push({ path: "/search" });
     },
+    toOther() {
+      Toast({
+        message: "该功能还未上线",
+        position: "bottom",
+        duration: 2000
+      });
+    },
     toCity() {
       this.$router.push({ path: "/city" });
+    },
+    fliterFnc(i) {
+      this.filterFlag = true;
+      this.filterIndex = i;
+    },
+    areaSelect(i) {
+      this.filterForm.area = i;
+    },
+    roleSelect(i) {
+      this.filterForm.role = i;
+    },
+    salarySelect(i) {
+      this.filterForm.salary = i;
+    },
+    filterCancle() {
+      if (this.filterIndex === 0) {
+        if (!this.filterForm.area) {
+          this.filterForm.area = "";
+          this.filterFlag = false;
+        } else {
+          this.filterFlag = false;
+        }
+      } else if (this.filterIndex === 1) {
+        if (!this.filterForm.role) {
+          this.filterForm.role = "";
+          this.filterFlag = false;
+        } else {
+          this.filterFlag = false;
+        }
+      } else if (this.filterIndex === 2) {
+        if (!this.filterForm.salary) {
+          this.filterForm.salary = "";
+          this.filterFlag = false;
+        } else {
+          this.filterFlag = false;
+        }
+      } else if (this.filterIndex === 3) {
+        if (!this.filterForm.sort) {
+          this.filterForm.sort = "";
+          this.filterFlag = false;
+        } else {
+          this.filterFlag = false;
+        }
+      }
+    },
+    filterQr() {
+      // 默认省市
+      let d = {
+        province: this.region.province,
+        city: this.region.city
+      };
+
+      // filterForm: {
+      //   area: "",
+      //   role: "",
+      //   salary: "",
+      //   sort: ""
+      // }
+
+      // 区域
+      if (this.filterForm.area && Number(this.filterForm.area) !== 0) {
+        d.area = this.role[Number(this.filterForm.area)];
+      }
+
+      // 薪资 salary
+      if (this.filterForm.salary && Number(this.filterForm.salary) !== 0) {
+        d.salary = this.filterForm.salary;
+      }
+
+      // 角色 role
+      if (this.filterForm.role && Number(this.filterForm.role) !== 0) {
+        d.station = this.filterForm.role;
+      }
+
+      this.$api
+        .recruitments({
+          params: d
+        })
+        .then(res => {
+          this.recruitments = res.results;
+        })
+        .catch(() => {});
+
+      this.filterFlag = false;
+
+      // if()
+      // title={title}&salary={salary}&station={station}&province={province}&city={city}&area={area}
+      // let d = {};
+      // if (filterForm.area)
+      // this.$api
+      // .recruitments()
+      // .then(res => {
+      //   this.recruitments = res.results;
+      // })
+      // .catch(() => {});
     }
   }
 };
 </script>
 <style scoped lang="stylus">
+.swiper-container
+  height 400px
+  img
+    height 100%
 .color1
   color #FF7818
+.color2
+  background #00aafb!important
+  color #fff!important
 .home
   .homeNav
     height 100px
@@ -229,6 +479,10 @@ export default {
     font-size 32px
     color #fff
     background linear-gradient(90deg,rgba(255,181,77,1),rgba(255,121,25,1))
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 99999;
     .nav-provice
       font-size 24px
       .nav-arrow
@@ -254,6 +508,7 @@ export default {
         color #fff
   .top-content
     background #fff
+    padding-top 100px
     .carousel
       img
         width 100%
@@ -297,10 +552,10 @@ export default {
             left 0
             right 0
   .bottom-content
-    background #fff
     color #fff
     .filter
       border-bottom 1px solid #ececec
+      background #fff
       .filter-content
         ul
           justify-content space-between
@@ -315,6 +570,7 @@ export default {
             width 28px
     .work
       padding-bottom 113px
+      background #fff
       li
         .work-content
           width 90%
@@ -340,4 +596,51 @@ export default {
                 padding 4px 4px
                 border-radius 6px
                 background:linear-gradient(90deg,rgba(255,120,24,1),rgba(255,185,80,1));
+
+.navFilter
+  position fixed
+  width 100%
+  height 260px
+  bottom 113px
+  background #fff
+  .navFilter-header
+    width 100%
+    height 75px
+    background #00aafb
+    line-height 75px
+    color #fff
+    align-items center
+    .qr
+      height 46px
+      line-height 46px
+      background #ff9300
+      text-align center
+      flex 1
+      margin-left 30px
+      border-radius 4px
+    .cancel
+      color #fff
+      height 46px
+      line-height 46px
+      background #8c8c8c
+      text-align center
+      flex 1
+      margin-right 30px
+      border-radius 4px
+    .select
+      flex 4
+  .navFilter-content
+    overflow auto
+    background #fff
+    li
+      flex-wrap wrap
+      div
+        height 50px
+        line-height 50px
+        padding 0 10px
+        background #f3f3f3
+        color #666
+        border-radius 4px
+        margin-left 16px
+        margin-top 10px
 </style>

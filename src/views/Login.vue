@@ -1,11 +1,6 @@
 <template>
   <div class="login">
-    <div class="login-img">
-      <img
-        src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-        alt=""
-      />
-    </div>
+    <div class="login-img"><img src="../assets/img/app.png" alt="" /></div>
     <div class="login-content mt10">
       <div class="login-input-list tal">
         <div class="tel">
@@ -59,7 +54,8 @@ export default {
                 position: "bottom",
                 duration: 2000
               });
-              localStorage.setItem("cellPhone", this.tel);
+              // localStorage.setItem("cellPhone", this.tel);
+              this.$store.dispatch("getInfo");
               this.$router.push("/");
             } else {
               Toast({

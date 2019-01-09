@@ -95,6 +95,12 @@ export default new Router({
       name: "salary",
       component: () =>
         import ("./views/Salary.vue")
+    },
+    {
+      path: "/help",
+      name: "help",
+      component: () =>
+        import ("./views/Help.vue")
     }
   ]
 });

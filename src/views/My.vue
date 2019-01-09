@@ -8,10 +8,10 @@
         </div>
         <div class="user-info tal ml5">
           <p class="user-info-name" v-if="userInfo.cellphone">
-            {{ userInfo.cellphone }}(<span style="color:rgb(100,222,173)">{{
-              userInfo.job_state
-            }}</span
-            >)
+            {{ userInfo.cellphone
+            }}<span style="color:rgb(100,222,173)" @click="toDetail();"
+              >({{ userInfo.job_state | status }})</span
+            >
           </p>
           <router-link tag="p" to="/login" v-if="!userInfo.cellphone"
             >去绑定账号</router-link
@@ -20,7 +20,7 @@
         </div>
         <div class="user-set"></div>
       </div>
-      <div class="profit layoutFlex">
+      <div class="profit layoutFlex" @click="toTotal">
         <span class="ml5"> 总收益 </span>
         <span class="fw">{{ userInfo.balance }}元</span>
         <span class="right-arrow mr5"></span>
@@ -85,17 +85,49 @@ export default {
       userInfo: res => res.userInfo
     })
   },
+  filters: {
+    status(s) {
+      let c = "";
+      switch (s) {
+        case "not-enrolled":
+          c = "未报名";
+          break;
+        case "enrolled":
+          c = "已报名";
+          break;
+        case "in-service":
+          c = "已入职";
+          break;
+        case "dimission":
+          c = "已离职";
+          break;
+      }
+      return c;
+    }
+  },
   methods: {
-    signUpFnc() {
-      if (!this.userInfo.cellphone) {
-        console.log("1");
-      } else {
-        this.$router.push("./login");
+    // signUpFnc() {
+    //   if (!this.userInfo.cellphone) {
+    //     console.log("1");
+    //   } else {
+    //     this.$router.push("./login");
+    //   }
+    // },
+    haveTel() {
+      // return false;
+      return !this.userInfo.cellphone ? true : false;
+    },
+    toDetail() {
+      if (
+        this.userInfo.job_state === "enrolled" ||
+        this.userInfo.job_state === "in-service"
+      ) {
+        this.$router.push("/detail?id=" + this.userInfo.recruitment.id);
       }
     },
-    haveTel() {
-      return false;
-      // return !this.userInfo.cellphone ? true : false;
+    // 去总收益
+    toTotal() {
+      this.$router.push("/withdraw");
     },
     // 去实名认证
     toAuth() {
@@ -114,13 +146,11 @@ export default {
     },
     // 去帮助反馈
     toHelp() {
-      let r = this.haveTel() ? "/login" : "/bind";
-      this.$router.push(r);
+      this.$router.push("/help");
     },
     // 去关于
     toAbout() {
-      let r = this.haveTel() ? "/login" : "/about";
-      this.$router.push(r);
+      this.$router.push("/about");
     }
   }
 };

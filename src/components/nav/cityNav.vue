@@ -2,7 +2,7 @@
   <div class="comNav">
     <div class="tac">
       <div class="arrow-left" @click="lastPage"></div>
-      {{ msg }} <span class="submit">确定</span>
+      {{ msg }} <span class="submit" @click="submit">确定</span>
     </div>
   </div>
 </template>
@@ -16,6 +16,9 @@ export default {
   methods: {
     lastPage() {
       this.$router.go(-1);
+    },
+    submit() {
+      this.$emit("submitFnc");
     }
   }
 };

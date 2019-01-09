@@ -1,7 +1,10 @@
 <template>
   <div class="auth">
-    <comNav msg="薪资列表" />
+    <comNav msg="薪资明细" />
     <div class="auth-content">
+      <div v-if="data.length === 0" style="margin-top:40px">
+        <img src="../assets/img/empty.png" alt="" />
+      </div>
       <ul>
         <li class="layoutFlex" v-for="(item, index) in data" :key="index">
           <span>金额入账：{{ item.amount }}</span>

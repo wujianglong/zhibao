@@ -2,8 +2,10 @@
   <div class="footer">
     <ul class="layoutFlex">
       <li><img src="@/assets/img/home.png" alt="" /> <span>首页</span></li>
-      <!-- <router-link tag="li" to="/sign"> </router-link>
-      <router-link tag="li" to="/wallet"> </router-link> -->
+      <!--
+        <router-link tag="li" to="/sign"> </router-link>
+        <router-link tag="li" to="/wallet"> </router-link>
+      -->
       <li @click="toSign">
         <img src="@/assets/img/baoming.png" alt="" /> <span>报名</span>
       </li>
@@ -18,6 +20,7 @@
 </template>
 
 <script>
+import { Toast } from "mint-ui";
 export default {
   name: "footerCom",
   props: {
@@ -25,11 +28,17 @@ export default {
   },
   methods: {
     toSign() {
-      if (!localStorage.cellPhone) {
-        this.$router.push("/login");
-      } else {
-        this.$router.push("/sign");
-      }
+      // if (!localStorage.cellPhone) {
+      //   this.$router.push("/login");
+      // } else {
+      //   this.$router.push("/sign");
+      // }
+
+      Toast({
+        message: "该功能还未上线",
+        position: "bottom",
+        duration: 2000
+      });
     },
     toWallet() {
       if (!localStorage.cellPhone) {
@@ -47,6 +56,7 @@ export default {
   bottom 0
   background #fff
   width 100%
+  border-top 1px solid #e6e6e6
   ul
     justify-content space-around
     align-items center

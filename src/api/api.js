@@ -117,5 +117,12 @@ export default {
   // 获取公告信息
   notices(params) {
     return ask.askGet(baseApiUrl + "/api/notices/", params);
+  },
+  sign(params) {
+    return ask.askPost(baseApiUrl + "/api/wechat/sign/", params);
+  },
+  // 上传实名
+  uploadImg(params) {
+    return ask.askPost(baseApiUrl + "/api/upload/", params);
   }
 };

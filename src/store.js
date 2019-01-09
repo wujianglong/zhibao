@@ -132,7 +132,16 @@ export default new Vuex.Store({
       can_enrollment: true
     },
     userInfo: {},
-    userToken: ""
+    userToken: "",
+    region: {
+      province: "",
+      city: "",
+      area: ""
+    },
+    address: {
+      j: "",
+      W: ""
+    }
   },
   mutations: {
     banner(state, res) {
@@ -143,6 +152,12 @@ export default new Vuex.Store({
     },
     token(state, res) {
       state.userToken = res;
+    },
+    region(state, res) {
+      state.region = res;
+    },
+    address(state, res) {
+      state.address = res;
     }
   },
   actions: {

@@ -2,8 +2,11 @@
   <div class="homNav">
     <div class="tac layoutFlex">
       <!-- <div class="arrow-left"></div> -->
-      <div class="nav-input"><input type="text" placeholder="搜索" /></div>
-      <div class="nav-btn mr5" @click="toLast">取消</div>
+      <div class="arrow-left" @click="lastPage"></div>
+      <div class="nav-input">
+        <input v-model="val" type="text" placeholder="搜索" />
+      </div>
+      <div class="nav-btn mr5" @click="toSearch">确认</div>
     </div>
   </div>
 </template>
@@ -11,12 +14,20 @@
 <script>
 export default {
   name: "comNav",
+  data() {
+    return {
+      val: ""
+    };
+  },
   props: {
     msg: String
   },
   methods: {
-    toLast() {
+    lastPage() {
       this.$router.go(-1);
+    },
+    toSearch() {
+      this.$emit("searchVal", this.val);
     }
   }
 };
@@ -45,8 +56,9 @@ export default {
     input
       height 60px
       border-radius 60px
+      margin-left 40px
       color #666
-      width 90%
+      width 80%
       text-indent 5%
   .nav-btn
     color #fff

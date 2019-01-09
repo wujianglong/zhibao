@@ -45,13 +45,17 @@
     </div>
     <div class="submit-btn mt10" @click="submit">提交</div>
 
-    <!-- <div class="submit-btn mt10" style="margin-top:100px" @click="submit">
-      提交1
-    </div> -->
+    <!--
+      <div class="submit-btn mt10" style="margin-top:100px" @click="submit">
+        提交1
+      </div>
+    -->
 
-    <!-- <router-link tag="div" class="submit-btn mt10" style="margin-top:100px"
-      >去实名认证</router-link
-    > -->
+    <!--
+      <router-link tag="div" class="submit-btn mt10" style="margin-top:100px"
+        >去实名认证</router-link
+      >
+    -->
     <!-- <div c></div> -->
   </div>
 </template>
@@ -109,8 +113,9 @@ export default {
               position: "bottom",
               duration: 2000
             });
-
-            this.$router.push("/auth");
+            this.$store.dispatch("getInfo");
+            // this.$router.push("/wallet");
+            this.$router.go(-1);
           }
         });
       }

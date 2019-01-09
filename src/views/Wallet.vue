@@ -3,10 +3,7 @@
     <comNav msg="我的钱包" />
     <div class="wallet-content">
       <div class="wallet-money">
-        <img
-          src="http://dl.wangzheka.cn/img/27eb593c8469c94f63271e112b251ef3.jpeg"
-          alt=""
-        />
+        <img src="../assets/img/mywallet.png" alt="" />
         <div class="layoutFlex">
           <p class="money tac">{{ userInfo.balance }}</p>
           <p class="tac">总余额(元)</p>
@@ -21,7 +18,7 @@
               <span class="right-arrow mr2"></span>
             </div>
           </router-link>
-          <router-link tag="li" to="/withdraw">
+          <router-link tag="li" to="/salary">
             <div class="layoutFlex">
               <img src="@/assets/img/zhangdan.png" alt="" />
               <span class="txt tal ml3">薪资明细</span>
@@ -71,9 +68,9 @@ export default {
       //   });
 
       // 提现完成实名认证
-      if (!localStorage.getItem("has_identification")) {
+      if (localStorage.getItem("has_identification") === "false") {
         this.$router.push("/auth");
-      } else if (!localStorage.getItem("has_bind_bank")) {
+      } else if (localStorage.getItem("has_bind_bank") === "false") {
         this.$router.push("/bind");
       } else {
         this.$api
@@ -86,6 +83,7 @@ export default {
               position: "bottom",
               duration: 2000
             });
+            this.$store.dispatch("getInfo");
           });
 
         // 最小提现额度不能小于2元
@@ -126,7 +124,6 @@ export default {
       left 0
       width 100%
       height 100%
-      background rgba(0,0,0,.5)
       align-items center
       flex-direction column
       justify-content center

@@ -9,7 +9,11 @@
         <div class="factory-name">
           <p class="name">{{ recruitmentsId.enterprise.name }}</p>
           <p class="mt1">
-            {{ recruitmentsId.station }} | {{ recruitmentsId.age }} | 男女不限
+            {{ role[recruitmentsId.station] }} |
+            {{ recruitmentsId.age_begin }}-{{ recruitmentsId.age_end }} |
+            <span v-if="Number(recruitmentsId.gender) === 0">男女不限</span
+            ><span v-if="Number(recruitmentsId.gender) === 1">男</span
+            ><span v-if="Number(recruitmentsId.gender) === 2">女</span>
           </p>
           <p class="color1 mt1">{{ recruitmentsId.salary }}/月</p>
         </div>
@@ -18,7 +22,7 @@
             <p><img src="" alt="" />{{ recruitmentsId.enterprise.name }}</p>
             <p class="mt1">{{ recruitmentsId.enterprise.address }}</p>
           </div>
-          <!-- <div class="right-arrow"></div> -->
+          <div class="right-arrow"></div>
         </div>
       </div>
       <!-- 岗位描述 -->
@@ -30,10 +34,12 @@
         <div class="require">
           <p class="mb3">入职要求：</p>
           <ul>
-            <!-- <li>1、年满18周岁以上，年龄18-45周岁为佳。</li>
-            <li>2、必须身体健康，没有任何传染性疾病，女性无怀孕者。</li>
-            <li>3、必须持有本人真实身份证有效证件。</li>
-            <li>4、工资时间不低于260小时。</li> -->
+            <!--
+              <li>1、年满18周岁以上，年龄18-45周岁为佳。</li>
+              <li>2、必须身体健康，没有任何传染性疾病，女性无怀孕者。</li>
+              <li>3、必须持有本人真实身份证有效证件。</li>
+              <li>4、工资时间不低于260小时。</li>
+            -->
             <li>{{ recruitmentsId.requirement }}</li>
           </ul>
           <p class="mb3 mt5">我能赚多少：</p>
@@ -43,9 +49,11 @@
           </ul>
           <p class="mb3 mt5">福利待遇：</p>
           <ul>
-            <!-- <li>1、伙食情况：包吃，菜色多样，自由选择。</li>
-            <li>2、住宿情况：包住，公司员工四人间宿舍，水电平摊。</li>
-            <li>3、公司缴纳五险一金。</li> -->
+            <!--
+              <li>1、伙食情况：包吃，菜色多样，自由选择。</li>
+              <li>2、住宿情况：包住，公司员工四人间宿舍，水电平摊。</li>
+              <li>3、公司缴纳五险一金。</li>
+            -->
             <li>伙食情况:{{ recruitmentsId.meals }}</li>
             <li>住宿情况:{{ recruitmentsId.commodity }}</li>
           </ul>
@@ -78,21 +86,26 @@
 </template>
 <script>
 import comNav from "@/components/nav/comNav";
-import { mapState } from "vuex";
 import { MessageBox, Toast } from "mint-ui";
-// import { MessageBox } from "mint-ui";
 export default {
   name: "detail",
   data() {
     return {
-      recruitmentsId: []
+      recruitmentsId: [],
+      role: [
+        "全部",
+        "普通就业",
+        "协警",
+        "机器人专区",
+        "保安专区",
+        "辅警",
+        "工程师",
+        "计算机专业",
+        "机器人视觉",
+        "临时工",
+        "尖端职业"
+      ]
     };
-  },
-  computed: {
-    ...mapState({
-      // recruitmentsId: res => res.recruitmentsId
-      // recruitments: []
-    })
   },
   components: {
     comNav
@@ -105,23 +118,20 @@ export default {
       this.$api.recruitmentsId(this.$route.query.id).then(res => {
         this.recruitmentsId = res;
       });
+      // 更新个人信息里面 报名 与 收藏字段
+      this.$store.dispatch("getInfo");
     },
     toMap() {
-      this.$router.push("/map");
+      this.$router.push(
+        "/map?t1=" +
+          this.recruitmentsId.enterprise.city +
+          "&t2=" +
+          this.recruitmentsId.enterprise.name
+      );
     },
     toJoin() {
       let id = this.recruitmentsId.id;
       let f = this.recruitmentsId.has_favorite;
-
-      // this.$api.cancelRenrollment(id).then(() => {
-      //   Toast({
-      //     message: "取消报名成功",
-      //     position: "bottom",
-      //     duration: 2000
-      //   });
-      //   this.update();
-      // });
-
       if (f) {
         // 取消收藏
         this.$api.cancelFavorite(id).then(() => {
@@ -148,15 +158,6 @@ export default {
       let id = this.recruitmentsId.id;
       let f = this.recruitmentsId.has_enrollment;
       let c = f ? "是否取消报名？" : "确认报名？";
-
-      // this.$api.renrollment(id).then(() => {
-      //   Toast({
-      //     message: "报名成功",
-      //     position: "bottom",
-      //     duration: 2000
-      //   });
-      //   this.update();
-      // });
 
       if (!localStorage.cellPhone) {
         this.$router.push("/login");
@@ -229,6 +230,16 @@ export default {
     .factory-location
       width 90%
       margin-left 5%
+      position relative
+      .right-arrow
+        position absolute
+        width 25px
+        height 25px
+        right 20px
+        top 20px
+        border-right 1px solid #ccc
+        border-bottom 1px solid #ccc
+        transform rotate(-45deg)
     .factory-name
       padding-bottom 0.3rem
       width 90%
@@ -258,10 +269,6 @@ export default {
         border-top 2px solid #ececec
     ul
       color #999
-  .right-arrow
-    width 20px
-    height 20px
-    border 1px solid #ccc
 .bottomBtn
   height 84px
   line-height 84px
