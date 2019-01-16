@@ -9,6 +9,9 @@
       <li @click="toSign">
         <img src="@/assets/img/baoming.png" alt="" /> <span>报名</span>
       </li>
+      <li @click="toSign">
+        <img src="@/assets/img/work.png" alt="" /> <span>工友圈</span>
+      </li>
       <li @click="toWallet">
         <img src="@/assets/img/money-default.png" alt="" /> <span>钱包</span>
       </li>
@@ -35,7 +38,7 @@ export default {
       // }
 
       Toast({
-        message: "该功能还未上线",
+        message: "敬请期待",
         position: "bottom",
         duration: 2000
       });
@@ -54,6 +57,7 @@ export default {
 .footer
   position fixed
   bottom 0
+  z-index 501
   background #fff
   width 100%
   border-top 1px solid #e6e6e6
@@ -62,7 +66,9 @@ export default {
     align-items center
     height 113px
     li
+      text-align center
       img
         display block
         width 46px
+        margin 0 auto
 </style>

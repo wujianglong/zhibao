@@ -18,13 +18,7 @@
               <span class="right-arrow mr2"></span>
             </div>
           </router-link>
-          <router-link tag="li" to="/salary">
-            <div class="layoutFlex">
-              <img src="@/assets/img/zhangdan.png" alt="" />
-              <span class="txt tal ml3">薪资明细</span>
-              <span class="right-arrow mr2"></span>
-            </div>
-          </router-link>
+
           <router-link tag="li" to="/withdraw">
             <div class="layoutFlex">
               <img src="@/assets/img/zhangdan.png" alt="" />

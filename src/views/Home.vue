@@ -25,10 +25,12 @@
               <img src="@/assets/img/country.png" alt="" />
               <p>地区工作</p>
             </router-link>
-            <li @click="toOther">
-              <img src="@/assets/img/marry.png" alt="" />
-              <p>婚恋交友</p>
-            </li>
+            <!--
+              <li @click="toOther">
+                <img src="@/assets/img/marry.png" alt="" />
+                <p>婚恋交友</p>
+              </li>
+            -->
             <li @click="toOther">
               <img src="@/assets/img/xinshou.png" alt="" />
               <p>新手引导</p>
@@ -117,7 +119,8 @@
       </div>
     </div>
     <!-- 筛选 -->
-    <div class="navFilter" v-show="filterFlag">
+    <div class="opacity" v-show="filterFlag"></div>
+    <div class="navFilter" :class="filterFlag ? 'active' : ''">
       <div class="navFilter-header layoutFlex">
         <div class="qr" @click="filterQr">确认</div>
         <div class="select">
@@ -356,7 +359,7 @@ export default {
     },
     toOther() {
       Toast({
-        message: "该功能还未上线",
+        message: "敬请期待",
         position: "bottom",
         duration: 2000
       });
@@ -601,8 +604,12 @@ export default {
   position fixed
   width 100%
   height 260px
-  bottom 113px
   background #fff
+  bottom -150px
+  z-index 500
+  transition bottom 0.5s
+  &.active
+    bottom 113px!important
   .navFilter-header
     width 100%
     height 75px
@@ -643,4 +650,13 @@ export default {
         border-radius 4px
         margin-left 16px
         margin-top 10px
+.opacity
+  position fixed
+  top 0
+  left 0
+  height 100%
+  width 100%
+  z-index 99
+  opacity 0.4
+  background #fff
 </style>

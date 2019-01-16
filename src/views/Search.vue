@@ -60,7 +60,7 @@ export default {
       this.$api
         .recruitments({
           params: {
-            title: r
+            keyword: r
           }
         })
         .then(res => {

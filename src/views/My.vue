@@ -9,9 +9,9 @@
         <div class="user-info tal ml5">
           <p class="user-info-name" v-if="userInfo.cellphone">
             {{ userInfo.cellphone
-            }}<span style="color:rgb(100,222,173)" @click="toDetail();"
-              >({{ userInfo.job_state | status }})</span
-            >
+            }}<span style="color:rgb(100,222,173)" @click="toDetail();">{{
+              userInfo.job_state | status
+            }}</span>
           </p>
           <router-link tag="p" to="/login" v-if="!userInfo.cellphone"
             >去绑定账号</router-link
@@ -42,7 +42,13 @@
             <span class="right-arrow mr2"></span>
           </div>
         </li>
-
+        <router-link tag="li" to="/salary">
+          <div class="layoutFlex">
+            <img src="@/assets/img/zhangdan.png" alt="" />
+            <span class="txt tal ml3">薪资明细</span>
+            <span class="right-arrow mr2"></span>
+          </div>
+        </router-link>
         <li @click="toCollect">
           <div class="layoutFlex">
             <img src="@/assets/img/collect.png" alt="" />
@@ -90,16 +96,16 @@ export default {
       let c = "";
       switch (s) {
         case "not-enrolled":
-          c = "未报名";
+          c = "";
           break;
         case "enrolled":
-          c = "已报名";
+          c = "（已报名）";
           break;
         case "in-service":
-          c = "已入职";
+          c = "（已入职）";
           break;
         case "dimission":
-          c = "已离职";
+          c = "（已离职）";
           break;
       }
       return c;
