@@ -1,5 +1,6 @@
 import axios from "axios";
 import qs from "qs";
+import { Toast } from "mint-ui";
 
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8";
@@ -14,6 +15,26 @@ axios.interceptors.request.use(
   },
   error => {
     return Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    switch (error.response.status) {
+      case 400:
+        Toast({
+          message: "请求失败，返回400",
+          position: "bottom",
+          duration: 2000
+        });
+        break;
+      default:
+        return Promise.reject(error);
+    }
+    return error;
   }
 );
 

@@ -160,7 +160,6 @@ export default {
       let c = f ? "是否取消报名？" : "确认报名？";
 
       // 是否实名
-
       if (!localStorage.cellPhone) {
         this.$router.push("/login");
         return false;
@@ -168,6 +167,7 @@ export default {
         MessageBox.confirm("前往实名认证？").then(() => {
           this.$router.push("/auth");
         });
+        return false;
       } else if (
         (localStorage.getItem("job_state") === "enrolled" ||
           localStorage.getItem("job_state") === "in-service") &&
